@@ -18,6 +18,14 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </TabControl.RenderTransform>
+            <TabItem Header="Search" HorizontalAlignment="Left" Height="16" Margin="0" VerticalAlignment="Top" Width="41.5">
+                <Grid x:Name="SearchGrid" Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="71*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </TabItem>
         </TabControl>
 
         <Rectangle Fill="#FF393941" HorizontalAlignment="Left" Height="80" Margin="-1,772,0,-5" Stroke="Black" VerticalAlignment="Top" Width="1276"/>
@@ -41,9 +49,10 @@
         <Label x:Name="OrderID" Content="Order ID:" HorizontalAlignment="Left" Margin="33,29,0,0" VerticalAlignment="Top" Width="123" FontSize="20" FontWeight="ExtraLight"/>
         <Label x:Name="TableNum" Content="Table Number:" HorizontalAlignment="Left" Margin="254,29,0,0" VerticalAlignment="Top" Width="156" FontSize="20" FontWeight="ExtraLight"/>
         <Button x:Name="btnLogout" Content="Logout" HorizontalAlignment="Left" Margin="1134,784,0,0" VerticalAlignment="Top" Width="124" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <Button x:Name="Add" Content="Add" HorizontalAlignment="Left" Margin="739,700,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
+        <Button x:Name="Add" Content="Add" HorizontalAlignment="Left" Margin="976,699,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
         <TextBox x:Name="QtyBox" HorizontalAlignment="Left" Height="45" Margin="603,700,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="93" FontSize="20"/>
         <Label x:Name="Quantitylbl" Content="Qty:" HorizontalAlignment="Left" Margin="544,700,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="ExtraLight"/>
+        <Grid x:Name="SizeButtonGrid" HorizontalAlignment="Left" Height="55" Margin="750,700,0,0" VerticalAlignment="Top" Width="175"/>
 
     </Grid>
 </Window>

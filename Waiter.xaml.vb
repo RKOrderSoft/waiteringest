@@ -46,35 +46,49 @@ Public Class Waiter
 
         Dim cats = Await orderClient.GetCategories()
 
-
+        'Increments through all categories
         For Each cat As String In cats
+
             Dim Dishes = Await orderClient.GetDishes(category:=cat)
-            Dim menuListView As New ListView
+            Dim menuListView As ListView = New ListView()
+
+
             Dim newTabItem As TabItem = New TabItem With {
                 .Header = cat,
                 .Content = menuListView
             }
+
+
             menutabs.Items.Add(newTabItem)
+            'Increments through all dishes in a category
             For Each dish As DishObject In Dishes
 
-                For Each size As String In dish.Sizes
-                    Console.WriteLine(size)
-                    'testMenu.Items.Add(dish)
-                    'Dim Items As List(Of Orders) = New List(Of Orders)
-                    'Items.Add(New Orders() With {
-                    '.name = dish.Name})
-                    'testMenu.Items.Add(Items)
+                If dish.Sizes IsNot Nothing Then
+                    'Increments through all available sizes for a dish
+                    For Each size As String In dish.Sizes
 
+                        'testMenu.Items.Add(dish)
+                        'Dim Items As List(Of Orders) = New List(Of Orders)
+                        'Items.Add(New Orders() With {
+                        '.name = dish.Name})
+                        'testMenu.Items.Add(Items)
+                    Next
+                End If
 
-                Next
+                Console.WriteLine(dish.Image)
                 menuListView.Items.Add(dish.Name)
             Next
+            menuListViewSizeButtons(menuListView, Dishes)
         Next
-    End Sub
-
-    Private Sub OrderList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles OrderList.SelectionChanged
 
     End Sub
+
+    Private Function menuListViewSizeButtons(menuListView, Dishes)
+
+
+    End Function
+
+
 
     Public Class Orders
         Public Property name As String
