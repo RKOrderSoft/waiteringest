@@ -48,8 +48,10 @@ Public Class Waiter
     Public Async Sub initialiseWindow()
 
         Dim cats = Await orderClient.GetCategories()
+
         Add.IsEnabled = False
         'Increments through all categories
+
         For Each cat As String In cats
             Dim Dishes = Await orderClient.GetDishes(category:=cat)
             Dim menuListView As ListView = New ListView()
@@ -60,8 +62,23 @@ Public Class Waiter
             Dim nameBinding = New Binding("Name")
             nameColumn.DisplayMemberBinding = nameBinding
 
+
+            Dim priceColumn As New GridViewColumn()
+            priceColumn.Header = "Price"
+            Dim priceBinding = New Binding("BasePrice")
+            priceColumn.DisplayMemberBinding = priceBinding
+
+            Dim picColumn As New GridViewColumn()
+            picColumn.Header = "Image"
+            Dim picBinding = New Binding("Image")
+            picColumn.DisplayMemberBinding = picBinding
+
+
             Dim gridView As New GridView()
             gridView.Columns.Add(nameColumn)
+            gridView.Columns.Add(priceColumn)
+            gridView.Columns.Add(picColumn)
+
             menuListView.View = gridView
 
             AddHandler menuListView.SelectionChanged, AddressOf selectionChanged
@@ -80,13 +97,44 @@ Public Class Waiter
 
 
 
-                Console.WriteLine(dish.Image)
                 menuListView.Items.Add(dish)
+                SearchListView.Items.Add(dish)
             Next
 
             ' Add tab to dict
             tabs.Add(cat, newTabItem)
         Next
+        AddHandler SearchListView.SelectionChanged, AddressOf SearchListViewselectionChanged
+
+    End Sub
+
+    Public Sub SearchListViewselectionChanged(sender As Object, e As RoutedEventArgs)
+        Add.IsEnabled = True
+
+        ' Renew orderToSend
+        orderToSend = New Orders()
+
+        orderToSend.name = sender.SelectedItem.Name
+        orderToSend.originDish = sender.SelectedItem
+        orderToSend.DishId = sender.SelectedItem.DishId
+        SizeComboBox.IsEnabled = True
+        SizeComboBox.Items.Clear()
+
+        If sender.SelectedItem.Sizes IsNot Nothing Then
+
+            SizeComboBox.IsEnabled = True
+            For Each size As String In sender.SelectedItem.Sizes
+                'Dim newSize As MenuItem = New MenuItem With {
+                'Header = sender.SelectedItem.size
+                '}
+                SizeComboBox.Items.Add(size)
+            Next
+            AddHandler SizeComboBox.SelectionChanged, AddressOf selectionComboBox
+        Else
+            SizeComboBox.IsEnabled = False
+
+
+        End If
 
     End Sub
 
@@ -193,30 +241,47 @@ Public Class Waiter
         ElseIf TblNum.Text = "0" Then
             MessageBox.Show("0 is not a valid table number")
         Else
+            Dim thisUserId = Await orderClient.GetCurrentUserId()
             Dim allDishesInOrderList As String() = New String(OrderList.Items.Count - 1) {}
 
             For i As Integer = 0 To allDishesInOrderList.Length - 1
                 Dim thisDish = OrderList.Items.GetItemAt(i)
-                allDishesInOrderList(i) = thisDish.DishID.ToString() + "/" + thisDish.size
+                If thisDish.size = Nothing Then
+                    allDishesInOrderList(i) = thisDish.DishID.ToString()
+                Else
+                    allDishesInOrderList(i) = thisDish.DishID.ToString() + "/" + thisDish.size
+                End If
             Next
             Console.WriteLine(allDishesInOrderList)
             SendingOrder.Dishes = allDishesInOrderList
             SendingOrder.TableNumber = TblNum.Text
             SendingOrder.TimeSubmitted = DateTime.Now
-            SendingOrder.Notes = ""
+            SendingOrder.Notes = txtNotes.Text
             SendingOrder.TimeCompleted = Nothing
             SendingOrder.TimePaid = Nothing
             SendingOrder.AmtPaid = Nothing
-            SendingOrder.ServerId = Nothing
+            SendingOrder.ServerId = thisUserId
             SendingOrder.OrderId = Nothing
 
             Dim SendNewOrder = Await orderClient.SetOrder(SendingOrder)
+
+            txtNotes.Text = Nothing
         End If
 
         MessageBox.Show("Order Sent!")
     End Sub
 
     Private Sub QtyBox_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles QtyBox.PreviewKeyDown
+        If (e.Key < 34) Or (e.Key > 43) Then
+            If (e.Key < 74) Or (e.Key > 83) Then
+                If (e.Key = 2) Then
+                    Return
+                End If
+                e.Handled = True
+            End If
+        End If
+    End Sub
+    Private Sub tblnum_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles TblNum.PreviewKeyDown
         If (e.Key < 34) Or (e.Key > 43) Then
             If (e.Key < 74) Or (e.Key > 83) Then
                 If (e.Key = 2) Then
@@ -252,4 +317,10 @@ Public Class Waiter
 
         End If
     End Sub
+
+    Private Sub SearchListView_Loaded(sender As Object, e As RoutedEventArgs) Handles SearchListView.Loaded
+
+    End Sub
+    'the RadTreeView.ItemsSource collection is traversed to find an item by a provided name'
+
 End Class
