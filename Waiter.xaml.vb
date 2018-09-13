@@ -68,16 +68,13 @@ Public Class Waiter
             Dim priceBinding = New Binding("BasePrice")
             priceColumn.DisplayMemberBinding = priceBinding
 
-            Dim picColumn As New GridViewColumn()
-            picColumn.Header = "Image"
-            Dim picBinding = New Binding("Image")
-            picColumn.DisplayMemberBinding = picBinding
+
 
 
             Dim gridView As New GridView()
             gridView.Columns.Add(nameColumn)
             gridView.Columns.Add(priceColumn)
-            gridView.Columns.Add(picColumn)
+            
 
             menuListView.View = gridView
 
@@ -98,45 +95,17 @@ Public Class Waiter
 
 
                 menuListView.Items.Add(dish)
-                SearchListView.Items.Add(dish)
+
             Next
 
             ' Add tab to dict
             tabs.Add(cat, newTabItem)
         Next
-        AddHandler SearchListView.SelectionChanged, AddressOf SearchListViewselectionChanged
+
 
     End Sub
 
-    Public Sub SearchListViewselectionChanged(sender As Object, e As RoutedEventArgs)
-        Add.IsEnabled = True
 
-        ' Renew orderToSend
-        orderToSend = New Orders()
-
-        orderToSend.name = sender.SelectedItem.Name
-        orderToSend.originDish = sender.SelectedItem
-        orderToSend.DishId = sender.SelectedItem.DishId
-        SizeComboBox.IsEnabled = True
-        SizeComboBox.Items.Clear()
-
-        If sender.SelectedItem.Sizes IsNot Nothing Then
-
-            SizeComboBox.IsEnabled = True
-            For Each size As String In sender.SelectedItem.Sizes
-                'Dim newSize As MenuItem = New MenuItem With {
-                'Header = sender.SelectedItem.size
-                '}
-                SizeComboBox.Items.Add(size)
-            Next
-            AddHandler SizeComboBox.SelectionChanged, AddressOf selectionComboBox
-        Else
-            SizeComboBox.IsEnabled = False
-
-
-        End If
-
-    End Sub
 
     Public Sub selectionChanged(sender As Object, e As RoutedEventArgs)
         Add.IsEnabled = True
@@ -210,13 +179,14 @@ Public Class Waiter
         OrderList.Items.Remove(OrderList.SelectedItem)
     End Sub
     Private Sub btnLogout_Click(sender As Object, e As RoutedEventArgs) Handles btnLogout.Click
-        If MessageBox.Show("Are you sure you want to log out?", "My App", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) = MessageBoxResult.Yes Then
-            End
+        If MessageBox.Show("Are you sure you want to exit?", "My App", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) = MessageBoxResult.Yes Then
+
+            Me.Close()
         End If
     End Sub
     Private Sub btnHelp_Click(sender As Object, e As RoutedEventArgs) Handles btnHelp.Click
-        Dim HelpWindow As Window = New Window
-        HelpWindow.Show()
+        Dim helpWindow As help = New help()
+        helpWindow.Show()
     End Sub
 
     ' Private Function createDishGrid(dish As DishObject) As Grid
@@ -318,9 +288,5 @@ Public Class Waiter
         End If
     End Sub
 
-    Private Sub SearchListView_Loaded(sender As Object, e As RoutedEventArgs) Handles SearchListView.Loaded
-
-    End Sub
-    'the RadTreeView.ItemsSource collection is traversed to find an item by a provided name'
 
 End Class

@@ -12,11 +12,11 @@ Class MainWindow
         Dim failed = False
         Try
             ' Initiate client with given IP
-            Await client.Init(txtIP.Text)
+            Await client.Init("http://" + txtIP.Text + "/")
         Catch ex As Exception
             ' Error was thrown during initialisation
             failed = True
-            MessageBox.Show(ex.ToString, "An error occurred while connecting")
+            MessageBox.Show("An error occurred while connecting")
         End Try
 
         If failed Then
@@ -37,6 +37,10 @@ Class MainWindow
         WaiterShow.Show()
         Me.Close()
 
+    End Sub
+
+    Private Sub Helpbtn_Click(sender As Object, e As RoutedEventArgs) Handles Helpbtn.Click
+        MessageBox.Show("Input the server IP without the enclosing http:// and /")
     End Sub
 End Class
 

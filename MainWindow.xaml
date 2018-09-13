@@ -5,20 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:waiteringest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="263.352" Width="501.492">
     <Grid>
-        <Label Name="lblTitle" Content="OrderSoft Client Example" HorizontalAlignment="Left" Margin="50,30,0,0" VerticalAlignment="Top" FontFamily="Circular Std Medium" FontSize="36"/>
+        <Label Name="lblTitle" Content="Welcome to OrderSoft Waiter" HorizontalAlignment="Left" Margin="20,5,0,0" VerticalAlignment="Top" FontSize="36" Height="65" Width="476" FontWeight="ExtraLight"/>
 
-        <TextBox Name="txtIP" HorizontalAlignment="Left" Height="23" Margin="55,129,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Name="lblIP" Content="Server IP" HorizontalAlignment="Left" Margin="50,100,0,0" VerticalAlignment="Top" FontFamily="Circular Std Medium" FontSize="16"/>
+        <TextBox Name="txtIP" HorizontalAlignment="Left" Height="23" Margin="55,116,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label Name="lblIP" Content="Server IP" HorizontalAlignment="Left" Margin="50,87,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="ExtraLight"/>
 
-       
-      
-
-        <Button Name="btnConnect" IsEnabled="True" Content="Connect" HorizontalAlignment="Left" Margin="55,157,0,0" VerticalAlignment="Top" Width="75"/>
-        
         <Label Name="itWorks" Content="wow it work" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontFamily="Circular Std Medium" FontSize="72" Visibility="Hidden"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="619,204,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button x:Name="Helpbtn" Content="Help" HorizontalAlignment="Left" Margin="55,180,0,0" VerticalAlignment="Top" Width="90" Height="28" FontSize="16" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
+        <Button x:Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Margin="55,147,0,0" VerticalAlignment="Top" Width="90" Height="28" FontSize="16" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
 
     </Grid>
 </Window>

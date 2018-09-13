@@ -18,23 +18,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </TabControl.RenderTransform>
-            <TabItem Header="Search" HorizontalAlignment="Left" Height="16" Margin="0" VerticalAlignment="Top" Width="41.5">
-                <Grid x:Name="SearchGrid" Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="71*"/>
-                    </Grid.ColumnDefinitions>
-                    <ListView x:Name="SearchListView" HorizontalAlignment="Left" Height="232" Margin="10,31,0,0" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="2">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Dish Name" DisplayMemberBinding="{Binding Name}"/>
-                                <GridViewColumn Header="Image" DisplayMemberBinding="{Binding Image}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <TextBox x:Name="SearchBox" Grid.Column="1" HorizontalAlignment="Left" Height="18" Margin="0,8,0,0" TextWrapping="Wrap" Text="Search..." VerticalAlignment="Top" Width="109"/>
-                </Grid>
-            </TabItem>
+            
         </TabControl>
 
         <Rectangle Fill="#FF393941" HorizontalAlignment="Left" Height="80" Margin="-1,772,0,-5" Stroke="Black" VerticalAlignment="Top" Width="1276"/>
@@ -42,8 +26,8 @@
             <Label x:Name="MyDateTime" Margin="928,28,9,2" FontSize="20" Content="test" FontWeight="ExtraLight"/>
         </Border>
         <Border BorderBrush="#FFCCCCCC" BorderThickness="0,0,8,0" HorizontalAlignment="Left" Height="692" Margin="0,80,0,0" VerticalAlignment="Top" Width="512"/>
-        <Rectangle Fill="#FFA1A1A1" HorizontalAlignment="Left" Height="68" Margin="12,687,0,0" StrokeThickness="4" VerticalAlignment="Top" Width="480" RenderTransformOrigin="1,0" RadiusX="10" RadiusY="10"/>
-        <Button x:Name="SendOrder" Content="Send Order" HorizontalAlignment="Left" Margin="33,699,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
+        <Rectangle Fill="#FFA1A1A1" HorizontalAlignment="Left" Height="68" Margin="12,687,0,0" StrokeThickness="4" VerticalAlignment="Top" Width="160" RenderTransformOrigin="1,0" RadiusX="10" RadiusY="10"/>
+        <Button x:Name="SendOrder" Content="Send Order" HorizontalAlignment="Left" Margin="31,699,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
         <ListView x:Name="OrderList" HorizontalAlignment="Left" Height="400" Margin="12,94,0,0" VerticalAlignment="Top" Width="480" FontSize="20" MinWidth="10" MinHeight="10" FontWeight="ExtraLight">
             <ListView.View>
                 <GridView>
@@ -52,19 +36,19 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="Clear" Content="Clear" HorizontalAlignment="Left" Margin="33,621,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
-        <Button x:Name="Delete" Content="Delete" HorizontalAlignment="Left" Margin="194,621,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
+        <Button x:Name="Clear" Content="Clear" HorizontalAlignment="Left" Margin="197,700,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
+        <Button x:Name="Delete" Content="Delete" HorizontalAlignment="Left" Margin="349,700,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
         <Label x:Name="TableNum" Content="Table Number:" HorizontalAlignment="Left" Margin="16,25,0,0" VerticalAlignment="Top" Width="156" FontSize="20" FontWeight="ExtraLight"/>
-        <Button x:Name="btnLogout" Content="Logout" HorizontalAlignment="Left" Margin="1134,784,0,0" VerticalAlignment="Top" Width="124" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <Button x:Name="Add" Content="Add" HorizontalAlignment="Left" Margin="976,699,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
+        <Button x:Name="btnLogout" Content="Exit" HorizontalAlignment="Left" Margin="1134,784,0,0" VerticalAlignment="Top" Width="124" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
+        <Button x:Name="Add" Content="Add" HorizontalAlignment="Left" Margin="1086,699,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight"/>
         <TextBox x:Name="QtyBox" HorizontalAlignment="Left" Height="45" Margin="603,700,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="93" FontSize="20"/>
         <Label x:Name="Quantitylbl" Content="Qty:" HorizontalAlignment="Left" Margin="544,700,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="ExtraLight"/>
         <Grid x:Name="SizeButtonGrid" HorizontalAlignment="Left" Height="55" Margin="750,700,0,0" VerticalAlignment="Top" Width="175"/>
         <Button x:Name="btnHelp" Content="Help" HorizontalAlignment="Left" Margin="10,784,0,0" VerticalAlignment="Top" Width="124" Height="45" FontSize="20" FontWeight="Bold" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <ComboBox x:Name="SizeComboBox" HorizontalAlignment="Left" Margin="750,704,0,0" VerticalAlignment="Top" Width="175" Height="36" IsTextSearchEnabled="False" FontSize="20" FontWeight="ExtraLight"/>
+        <ComboBox x:Name="SizeComboBox" HorizontalAlignment="Left" Margin="847,704,0,0" VerticalAlignment="Top" Width="175" Height="36" IsTextSearchEnabled="False" FontSize="20" FontWeight="ExtraLight"/>
         <TextBox x:Name="TblNum" HorizontalAlignment="Left" Height="37" Margin="153,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="93" FontSize="20"/>
-        <Button x:Name="AddNotes" Content="Add Notes" HorizontalAlignment="Left" Margin="354,621,0,0" VerticalAlignment="Top" Width="123" Height="45" FontSize="20" Foreground="Black" Background="#FFE5E5E5" BorderBrush="{x:Null}" FontWeight="ExtraLight" Cursor="None"/>
-        <TextBox x:Name="txtNotes" HorizontalAlignment="Left" Height="49" Margin="12,550,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="480" FontSize="20"/>
+        <TextBox x:Name="txtNotes" HorizontalAlignment="Left" Height="104" Margin="12,550,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="480" FontSize="20"/>
         <Label x:Name="AdditionalNotesLbl" Content="Additional Notes:" HorizontalAlignment="Left" Margin="12,514,0,0" VerticalAlignment="Top" Width="156" FontSize="20" FontWeight="ExtraLight"/>
+        <Label x:Name="sizeslbl" Content="Dish Size:" HorizontalAlignment="Left" Margin="750,703,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="ExtraLight"/>
     </Grid>
 </Window>

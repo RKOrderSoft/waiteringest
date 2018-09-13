@@ -23,7 +23,7 @@ Public Class userpass
             Await Client.Login(txtUser.Text, txtPassword.Password)
         Catch ex As Exception
             failed = True
-            MessageBox.Show(ex.ToString, "Error while logging in")
+            MessageBox.Show("Error while logging in")
         End Try
 
         If failed Then
@@ -39,5 +39,9 @@ Public Class userpass
             WaiterWindow.Show()
             Me.Close()
         End If
+    End Sub
+
+    Private Sub Helpbtn_Click(sender As Object, e As RoutedEventArgs) Handles Helpbtn.Click
+        MessageBox.Show("Input a valid username and password in order to log in.")
     End Sub
 End Class
