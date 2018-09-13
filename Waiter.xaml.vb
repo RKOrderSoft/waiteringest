@@ -92,6 +92,10 @@ Public Class Waiter
 
     Public Sub selectionChanged(sender As Object, e As RoutedEventArgs)
         Add.IsEnabled = True
+
+        ' Renew orderToSend
+        orderToSend = New Orders()
+
         orderToSend.name = sender.SelectedItem.Name
         orderToSend.originDish = sender.SelectedItem
         orderToSend.DishId = sender.SelectedItem.DishId
@@ -189,10 +193,11 @@ Public Class Waiter
         ElseIf TblNum.Text = "0" Then
             MessageBox.Show("0 is not a valid table number")
         Else
-            Dim allDishesInOrderList As String() = New String(OrderList.SelectedItems.Count - 1) {}
+            Dim allDishesInOrderList As String() = New String(OrderList.Items.Count - 1) {}
 
             For i As Integer = 0 To allDishesInOrderList.Length - 1
-                allDishesInOrderList(i) = OrderList.SelectedItems(i).DishID.ToString() + "/" + OrderList.SelectedItems(i).size
+                Dim thisDish = OrderList.Items.GetItemAt(i)
+                allDishesInOrderList(i) = thisDish.DishID.ToString() + "/" + thisDish.size
             Next
             Console.WriteLine(allDishesInOrderList)
             SendingOrder.Dishes = allDishesInOrderList
