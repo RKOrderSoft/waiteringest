@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:waiteringest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="263.352" Width="501.492">
+        Title="Connect to Server" Height="263.352" Width="501.492" ResizeMode="NoResize">
     <Grid>
         <Label Name="lblTitle" Content="Welcome to OrderSoft Waiter" HorizontalAlignment="Left" Margin="20,5,0,0" VerticalAlignment="Top" FontSize="36" Height="65" Width="476" FontWeight="ExtraLight"/>
 

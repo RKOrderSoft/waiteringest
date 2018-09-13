@@ -1,26 +1,6 @@
 ﻿Imports OrderSoft
 Imports System.Windows.Threading
 
-'Public Class WaiterDish
-'Public Property dishId As Integer
-'Public Property Name As String
-'Public Property size As String
-'Public Property upgradePrice As Single
-'Public Property totalPrice As Single
-'End Class
-
-'Public Class WaiterOrder
-'Public Property origOrder As OrderObject
-'Public Property orderId As String
-'Public Property tableNumber As Integer
-'Public Property serverID As String
-'Public Property notes As String
-'
-'Public Property dishIds As List(Of WaiterDish)
-
-'End Class
-
-
 Public Class Waiter
     Dim clockTimer As New DispatcherTimer()
     'Dim orderInfo As New WaiterOrder
@@ -28,6 +8,15 @@ Public Class Waiter
     Dim orderToSend As New Orders
     Dim tabs As New Dictionary(Of String, TabItem)
     Dim SendingOrder As New OrderObject
+
+    Public Class Orders
+        Public Property name As String
+        Public Property size As String
+        Public Property qty As Integer
+        Public Property DishId As Integer
+        Public Property originDish As DishObject
+
+    End Class
 
 
     Public Sub New(receivedClient As OSClient)
@@ -46,12 +35,12 @@ Public Class Waiter
     End Sub
 
     Public Async Sub initialiseWindow()
-
+        'Getting categories
         Dim cats = Await orderClient.GetCategories()
 
         Add.IsEnabled = False
-        'Increments through all categories
 
+        'Increments through all categories
         For Each cat As String In cats
             Dim Dishes = Await orderClient.GetDishes(category:=cat)
             Dim menuListView As ListView = New ListView()
@@ -124,9 +113,7 @@ Public Class Waiter
 
             SizeComboBox.IsEnabled = True
             For Each size As String In sender.SelectedItem.Sizes
-                'Dim newSize As MenuItem = New MenuItem With {
-                'Header = sender.SelectedItem.size
-                '}
+
                 SizeComboBox.Items.Add(size)
             Next
             AddHandler SizeComboBox.SelectionChanged, AddressOf selectionComboBox
@@ -137,6 +124,7 @@ Public Class Waiter
         End If
     End Sub
 
+    'Size selection
     Private Sub selectionComboBox(sender As Object, e As SelectionChangedEventArgs)
         orderToSend.size = sender.SelectedItem
         Console.WriteLine(orderToSend.size)
@@ -150,14 +138,7 @@ Public Class Waiter
     End Sub
 
 
-    Public Class Orders
-        Public Property name As String
-        Public Property size As String
-        Public Property qty As Integer
-        Public Property DishId As Integer
-        Public Property originDish As DishObject
 
-    End Class
 
 
     'Date and time
@@ -189,23 +170,17 @@ Public Class Waiter
         helpWindow.Show()
     End Sub
 
-    ' Private Function createDishGrid(dish As DishObject) As Grid
-    'Dim gridWithDish = New Grid()
 
-    'Dim dishNameLabel = New Label()
-    '   dishNameLabel.Content = dish.Name
-    '    gridWithDish.Children.Add(dishNameLabel)
 
-    ' continue for other fields
-    '     gridRamen.Children.Add(gridWithDish)
-    '  End Function
     Private Sub QtyBox_Loaded(sender As Object, e As RoutedEventArgs) Handles QtyBox.Loaded
+        'If no quantity is specified
         If QtyBox.Text = Nothing Then
             MessageBox.Show("Please specify a quantity")
         End If
     End Sub
 
     Private Async Sub SendOrder_Click(sender As Object, e As RoutedEventArgs) Handles SendOrder.Click
+        'Deals with invalid table numbers
         If TblNum.Text = Nothing Then
             MessageBox.Show("Please specify a table number")
         ElseIf TblNum.Text = "0" Then
@@ -219,6 +194,7 @@ Public Class Waiter
                 If thisDish.size = Nothing Then
                     allDishesInOrderList(i) = thisDish.DishID.ToString()
                 Else
+                    'Following format in data dictionary
                     allDishesInOrderList(i) = thisDish.DishID.ToString() + "/" + thisDish.size
                 End If
             Next
@@ -233,6 +209,7 @@ Public Class Waiter
             SendingOrder.ServerId = thisUserId
             SendingOrder.OrderId = Nothing
 
+            'Sending order to server
             Dim SendNewOrder = Await orderClient.SetOrder(SendingOrder)
 
             txtNotes.Text = Nothing
@@ -242,6 +219,7 @@ Public Class Waiter
     End Sub
 
     Private Sub QtyBox_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles QtyBox.PreviewKeyDown
+        'Restricts to numbers only
         If (e.Key < 34) Or (e.Key > 43) Then
             If (e.Key < 74) Or (e.Key > 83) Then
                 If (e.Key = 2) Then
@@ -251,7 +229,9 @@ Public Class Waiter
             End If
         End If
     End Sub
+
     Private Sub tblnum_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles TblNum.PreviewKeyDown
+        'Restricts to numbers only
         If (e.Key < 34) Or (e.Key > 43) Then
             If (e.Key < 74) Or (e.Key > 83) Then
                 If (e.Key = 2) Then
@@ -266,6 +246,7 @@ Public Class Waiter
         Dim n As Integer
         n = 0
 
+        'Deals with quantity
         If QtyBox.Text = Nothing Then
             MessageBox.Show("Please specify a quantity")
         Else
