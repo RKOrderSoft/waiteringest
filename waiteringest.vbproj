@@ -70,12 +70,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="help.xaml.vb">
+      <DependentUpon>help.xaml</DependentUpon>
+    </Compile>
     <Compile Include="userpass.xaml.vb">
       <DependentUpon>userpass.xaml</DependentUpon>
     </Compile>
     <Compile Include="Waiter.xaml.vb">
       <DependentUpon>Waiter.xaml</DependentUpon>
     </Compile>
+    <Page Include="help.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

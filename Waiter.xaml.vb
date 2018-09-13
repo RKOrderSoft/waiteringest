@@ -25,7 +25,10 @@ Public Class Waiter
     Dim clockTimer As New DispatcherTimer()
     'Dim orderInfo As New WaiterOrder
     Dim orderClient As OSClient
-    Dim orderToSend As New OrderObject
+    Dim orderToSend As New Orders
+    Dim tabs As New Dictionary(Of String, TabItem)
+    Dim SendingOrder As New OrderObject
+
 
     Public Sub New(receivedClient As OSClient)
         ' This call is required by the designer.
@@ -45,12 +48,24 @@ Public Class Waiter
     Public Async Sub initialiseWindow()
 
         Dim cats = Await orderClient.GetCategories()
-
+        Add.IsEnabled = False
         'Increments through all categories
         For Each cat As String In cats
-
             Dim Dishes = Await orderClient.GetDishes(category:=cat)
             Dim menuListView As ListView = New ListView()
+
+
+            Dim nameColumn As New GridViewColumn()
+            nameColumn.Header = "Dish name"
+            Dim nameBinding = New Binding("Name")
+            nameColumn.DisplayMemberBinding = nameBinding
+
+            Dim gridView As New GridView()
+            gridView.Columns.Add(nameColumn)
+            menuListView.View = gridView
+
+            AddHandler menuListView.SelectionChanged, AddressOf selectionChanged
+
 
 
             Dim newTabItem As TabItem = New TabItem With {
@@ -63,55 +78,66 @@ Public Class Waiter
             'Increments through all dishes in a category
             For Each dish As DishObject In Dishes
 
-                If dish.Sizes IsNot Nothing Then
-                    'Increments through all available sizes for a dish
-                    For Each size As String In dish.Sizes
 
-                        'testMenu.Items.Add(dish)
-                        'Dim Items As List(Of Orders) = New List(Of Orders)
-                        'Items.Add(New Orders() With {
-                        '.name = dish.Name})
-                        'testMenu.Items.Add(Items)
-                    Next
-                End If
 
                 Console.WriteLine(dish.Image)
-                menuListView.Items.Add(dish.Name)
+                menuListView.Items.Add(dish)
             Next
-            menuListViewSizeButtons(menuListView, Dishes)
+
+            ' Add tab to dict
+            tabs.Add(cat, newTabItem)
         Next
 
     End Sub
 
-    Private Function menuListViewSizeButtons(menuListView, Dishes)
+    Public Sub selectionChanged(sender As Object, e As RoutedEventArgs)
+        Add.IsEnabled = True
+        orderToSend.name = sender.SelectedItem.Name
+        orderToSend.originDish = sender.SelectedItem
+        orderToSend.DishId = sender.SelectedItem.DishId
+        Console.WriteLine(orderToSend.DishId)
+        SizeComboBox.IsEnabled = True
+        SizeComboBox.Items.Clear()
+
+        If sender.SelectedItem.Sizes IsNot Nothing Then
+
+            SizeComboBox.IsEnabled = True
+            For Each size As String In sender.SelectedItem.Sizes
+                'Dim newSize As MenuItem = New MenuItem With {
+                'Header = sender.SelectedItem.size
+                '}
+                SizeComboBox.Items.Add(size)
+            Next
+            AddHandler SizeComboBox.SelectionChanged, AddressOf selectionComboBox
+        Else
+            SizeComboBox.IsEnabled = False
 
 
-    End Function
+        End If
+    End Sub
 
+    Private Sub selectionComboBox(sender As Object, e As SelectionChangedEventArgs)
+        orderToSend.size = sender.SelectedItem
+        Console.WriteLine(orderToSend.size)
+    End Sub
+
+    Private Sub tabselectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        'should disable drop down menu
+        If TypeOf e.Source Is TabControl Then
+            SizeComboBox.IsEnabled = False
+        End If
+    End Sub
 
 
     Public Class Orders
         Public Property name As String
         Public Property size As String
         Public Property qty As Integer
+        Public Property DishId As Integer
+        Public Property originDish As DishObject
 
     End Class
 
-
-
-    Public Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        'InitializeComponent()
-        ' Dim Items As List(Of Orders) = New List(Of Orders)
-        '  Items.Add(New Orders() With {
-        '   .name = "Nuts",
-        '    .size = "Big",
-        '  .qty = 2
-        '  })
-        ' OrderList.Items.Add(Items)
-
-
-
-    End Sub
 
     'Date and time
     Private Sub clockTick() Handles MyDateTime.Loaded
@@ -120,9 +146,7 @@ Public Class Waiter
 
 
 
-    Private Sub ListView_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-    End Sub
 
     'Clears all items in Listview
     Private Sub Clear_Click(sender As Object, e As RoutedEventArgs) Handles Clear.Click
@@ -138,6 +162,10 @@ Public Class Waiter
             End
         End If
     End Sub
+    Private Sub btnHelp_Click(sender As Object, e As RoutedEventArgs) Handles btnHelp.Click
+        Dim HelpWindow As Window = New Window
+        HelpWindow.Show()
+    End Sub
 
     ' Private Function createDishGrid(dish As DishObject) As Grid
     'Dim gridWithDish = New Grid()
@@ -149,10 +177,74 @@ Public Class Waiter
     ' continue for other fields
     '     gridRamen.Children.Add(gridWithDish)
     '  End Function
+    Private Sub QtyBox_Loaded(sender As Object, e As RoutedEventArgs) Handles QtyBox.Loaded
+        If QtyBox.Text = Nothing Then
+            MessageBox.Show("Please specify a quantity")
+        End If
+    End Sub
 
+    Private Async Sub SendOrder_Click(sender As Object, e As RoutedEventArgs) Handles SendOrder.Click
+        If TblNum.Text = Nothing Then
+            MessageBox.Show("Please specify a table number")
+        ElseIf TblNum.Text = "0" Then
+            MessageBox.Show("0 is not a valid table number")
+        Else
+            Dim allDishesInOrderList As String() = New String(OrderList.SelectedItems.Count - 1) {}
 
-    Private Sub SendOrder_Click(sender As Object, e As RoutedEventArgs) Handles SendOrder.Click
+            For i As Integer = 0 To allDishesInOrderList.Length - 1
+                allDishesInOrderList(i) = OrderList.SelectedItems(i).DishID.ToString() + "/" + OrderList.SelectedItems(i).size
+            Next
+            Console.WriteLine(allDishesInOrderList)
+            SendingOrder.Dishes = allDishesInOrderList
+            SendingOrder.TableNumber = TblNum.Text
+            SendingOrder.TimeSubmitted = DateTime.Now
+            SendingOrder.Notes = ""
+            SendingOrder.TimeCompleted = Nothing
+            SendingOrder.TimePaid = Nothing
+            SendingOrder.AmtPaid = Nothing
+            SendingOrder.ServerId = Nothing
+            SendingOrder.OrderId = Nothing
+
+            Dim SendNewOrder = Await orderClient.SetOrder(SendingOrder)
+        End If
 
         MessageBox.Show("Order Sent!")
+    End Sub
+
+    Private Sub QtyBox_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles QtyBox.PreviewKeyDown
+        If (e.Key < 34) Or (e.Key > 43) Then
+            If (e.Key < 74) Or (e.Key > 83) Then
+                If (e.Key = 2) Then
+                    Return
+                End If
+                e.Handled = True
+            End If
+        End If
+    End Sub
+
+    Private Sub Add_Click(sender As Object, e As RoutedEventArgs) Handles Add.Click
+        Dim n As Integer
+        n = 0
+
+        If QtyBox.Text = Nothing Then
+            MessageBox.Show("Please specify a quantity")
+        Else
+            If orderToSend.size IsNot Nothing Then
+                While n < QtyBox.Text
+                    OrderList.Items.Add(orderToSend)
+                    n = n + 1
+                End While
+            Else
+                If orderToSend.originDish.Sizes IsNot Nothing Then
+                    MessageBox.Show("You need to pick a size")
+                Else
+                    While n < QtyBox.Text
+                        OrderList.Items.Add(orderToSend)
+                        n = n + 1
+                    End While
+                End If
+            End If
+
+        End If
     End Sub
 End Class
